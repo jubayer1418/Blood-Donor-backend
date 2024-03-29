@@ -18,7 +18,6 @@ const prisma_1 = __importDefault(require("./shared/prisma"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield prisma_1.default.$connect();
             app_1.default.listen(config_1.default.port, () => {
                 console.log(`Example app listening on port ${config_1.default.port}`);
             });
