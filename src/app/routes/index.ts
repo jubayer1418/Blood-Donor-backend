@@ -1,6 +1,7 @@
 import express from "express";
-import { userRouters } from "../modules/User/user.routes";
 import { DonorRoutes } from "../modules/donor-user/donor.routes";
+import { userRouters } from "../modules/User/user.routes";
+import { userProfileRouters } from "../modules/UserProfile/userProfile.routers";
 const router = express.Router();
 const modulerRoutes = [
   {
@@ -10,6 +11,10 @@ const modulerRoutes = [
   {
     path: "/",
     route: DonorRoutes,
+  },
+  {
+    path: "/",
+    route: userProfileRouters,
   },
 ];
 modulerRoutes.forEach((route) => router.use(route.path, route.route));

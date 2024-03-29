@@ -1,7 +1,7 @@
 import express from "express";
-import { userController } from "./user.controller";
+import { profileController } from "./userProfile.controller";
 const routes = express.Router();
-routes.get("/my-profile", userController.createUser);
-routes.put("/my-profile", userController.loginUser);
+routes.get("/my-profile", profileController.getUserProfile);
+routes.put("/my-profile", profileController.updateProfile);
 
 export const userProfileRouters = routes;
