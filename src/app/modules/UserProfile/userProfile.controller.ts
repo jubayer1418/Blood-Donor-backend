@@ -5,7 +5,7 @@ import sendResponse from "../../../shared/sendRespons";
 import { profileService } from "./userProfile.service";
 
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await profileService.getFromDb();
+  const result = await profileService.getFromDb(req.user.id);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

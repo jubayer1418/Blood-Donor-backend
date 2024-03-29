@@ -24,10 +24,9 @@ const auth = () => {
       } catch (error) {
         throw new AppError(httpStatus.UNAUTHORIZED, "JWT expire!");
       }
-
       const { id } = decoded as JwtPayload;
 
-      const user = await prisma.user.findUniqueOrThrow({ where: id });
+      const user = await prisma.user.findUniqueOrThrow({ where: { id } });
 
       if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, "This user is not found !");

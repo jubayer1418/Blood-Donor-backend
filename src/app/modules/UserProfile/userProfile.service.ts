@@ -1,9 +1,9 @@
 import prisma from "../../../shared/prisma";
 
-const getFromDb = async () => {
+const getFromDb = async (id: string) => {
   const result = await prisma.user.findUniqueOrThrow({
     where: {
-      id: "8b9c2c10-bf61-411d-8865-78106179e2bf",
+      id,
     },
     include: {
       userProfile: true,
