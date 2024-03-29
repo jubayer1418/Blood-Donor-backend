@@ -28,7 +28,7 @@ const getAllFromDb = async (
 };
 const postFromDb = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await DonorService.postFromDb(req.body);
+    const result = await DonorService.postFromDb(req.user.id, req.body);
 
     sendResponse(res, {
       success: true,

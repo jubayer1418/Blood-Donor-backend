@@ -14,7 +14,7 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await profileService.updateFromDb(req.params.id, req.body);
+  const result = await profileService.updateFromDb(req.user.id, req.body);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

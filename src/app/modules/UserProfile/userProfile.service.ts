@@ -12,11 +12,7 @@ const getFromDb = async () => {
 
   return result;
 };
-const updateFromDb = async (
-  id = "1ad1d09e-9ca0-4ef1-a2c8-609b516cdd14",
-  payload: any
-) => {
-  console.log(payload);
+const updateFromDb = async (id: string, payload: any) => {
   await prisma.userProfile.findUniqueOrThrow({ where: { id } });
   const result = await prisma.userProfile.update({
     where: { id },

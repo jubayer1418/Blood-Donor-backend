@@ -61,9 +61,10 @@ const getAllFromDb = async (param: any, options: any) => {
   };
 };
 
-const postFromDb = async (payload: any) => {
+const postFromDb = async (id: string, payload: any) => {
+  console.log(id);
   const result = await prisma.request.create({
-    data: { ...payload, requesterId: "a99aeb98-a620-4f28-98dc-de1f42fb8a6f" },
+    data: { ...payload, requesterId: id },
 
     include: {
       donor: {
