@@ -1,7 +1,9 @@
+import prisma from "../../../shared/prisma";
+
 const getFromDb = async () => {
-  const result = await prisma.request.findMany({
+  const result = await prisma.user.findMany({
     include: {
-      requester: true,
+      userProfile: true,
     },
   });
 
