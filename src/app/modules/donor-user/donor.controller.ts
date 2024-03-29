@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import pick from "../../../shared/pick";
 import sendResponse from "../../../shared/sendRespons";
-import { adminFilterableFields } from "./donor.constant";
+import { donorFilterableFields } from "./donor.constant";
 import { DonorService } from "./donor.service";
 
 const getAllFromDb = async (
@@ -11,7 +11,7 @@ const getAllFromDb = async (
   next: NextFunction
 ) => {
   try {
-    const filters = pick(req.query, adminFilterableFields);
+    const filters = pick(req.query, donorFilterableFields);
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
     const result = await DonorService.getAllFromDb(filters, options);
 
@@ -26,7 +26,11 @@ const getAllFromDb = async (
     next(error);
   }
 };
-const postFromDb = async (req: Request, res: Response, next: NextFunction) => {
+const postFromDb = async (
+  req: Request & { user?: any },
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await DonorService.postFromDb(req.user.id, req.body);
 

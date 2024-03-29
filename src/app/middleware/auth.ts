@@ -16,13 +16,19 @@ const auth = () => {
       const token = req.headers.authorization;
 
       if (!token) {
-        throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
+        throw new AppError(
+          httpStatus.UNAUTHORIZED,
+          "No JWT is provided in the request headers!"
+        );
       }
       let decoded;
       try {
         decoded = jwt.verify(token, config.jwt.jwt_secret as Secret);
       } catch (error) {
-        throw new AppError(httpStatus.UNAUTHORIZED, "JWT expire!");
+        throw new AppError(
+          httpStatus.UNAUTHORIZED,
+          "The provided JWT (JSON Web Token) has expired."
+        );
       }
       const { id } = decoded as JwtPayload;
 

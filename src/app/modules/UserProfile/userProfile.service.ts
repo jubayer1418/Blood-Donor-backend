@@ -13,9 +13,9 @@ const getFromDb = async (id: string) => {
   return result;
 };
 const updateFromDb = async (id: string, payload: any) => {
-  await prisma.userProfile.findUniqueOrThrow({ where: { id } });
+  await prisma.userProfile.findUniqueOrThrow({ where: { userId: id } });
   const result = await prisma.userProfile.update({
-    where: { id },
+    where: { userId: id },
 
     data: payload,
   });

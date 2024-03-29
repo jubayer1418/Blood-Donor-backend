@@ -1,8 +1,16 @@
-export const adminFilterableFields = [
+export const donorFilterableFields = [
   "name",
   "email",
   "searchTerm",
   "bloodType",
   "availability",
+  "age",
+  "lastDonationDate",
+  "hospitalName",
+  "hospitalAddress",
+  "reason",
+  "bio",
+  "location",
+  "contactNumber",
 ];
-export const adminSearchAbleFields = ["name", "email", "bloodType", "location"];
+export const donorSearchAbleFields = ["name", "email", "bloodType", "location"];
