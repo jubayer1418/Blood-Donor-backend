@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { Prisma } from "@prisma/client";
 import { paginationHelper } from "../../../helper/paginationHelper";
 import prisma from "../../../shared/prisma";
@@ -6,8 +7,8 @@ import { donorSearchAbleFields } from "./donor.constant";
 const getAllFromDb = async (param: any, options: any) => {
   const { page, limit, sortBy, sortOrder, skip } =
     paginationHelper.calculatePagination(options);
-  const { searchTerm, ...filterData } = param;
-
+  const { searchTerm, availability, ...filterData } = param;
+  console.log(searchTerm);
   const andConditions: Prisma.UserWhereInput[] = [];
   if (searchTerm) {
     andConditions.push({
@@ -19,7 +20,17 @@ const getAllFromDb = async (param: any, options: any) => {
       })),
     });
   }
-
+  if (availability !== undefined) {
+    andConditions.push({
+      availability:
+        undefined ||
+        (availability == "Available" && true) ||
+        (availability == "Unavailable" && false) ||
+        (availability == "" && undefined),
+    });
+  }
+  if (filterData.bloodType == "") delete filterData.bloodType;
+  if (filterData.location == "") delete filterData.location;
   if (Object.keys(filterData).length > 0) {
     andConditions.push({
       AND: Object.keys(filterData).map((field) => ({
@@ -64,12 +75,16 @@ const getAllFromDb = async (param: any, options: any) => {
 };
 
 const postFromDb = async (id: string, payload: any) => {
-  console.log(id);
   const result = await prisma.request.create({
     data: { ...payload, requesterId: id },
 
     include: {
       donor: {
+        include: {
+          userProfile: true,
+        },
+      },
+      requester: {
         include: {
           userProfile: true,
         },
@@ -82,6 +97,7 @@ const getFromDb = async () => {
   const result = await prisma.request.findMany({
     include: {
       requester: true,
+      donor: true,
     },
   });
 
@@ -96,10 +112,48 @@ const updateFromDb = async (id: string, payload: any) => {
   });
   return result;
 };
+const getSingleFromDb = async (id: string) => {
+  const result = await prisma.user.findUniqueOrThrow({
+    where: { id },
+    include: {
+      userProfile: true,
+    },
+  });
+  console.log(result);
+
+  return result;
+};
+const getFromMeDb = async (id: string) => {
+  const result = await prisma.request.findMany({
+    where: { donorId: id },
+    include: {
+      requester: true,
+      donor: true,
+    },
+  });
+  console.log(result);
+
+  return result;
+};
+const getFromMyRequestDb = async (id: string) => {
+  const result = await prisma.request.findMany({
+    where: { requesterId: id },
+    include: {
+      requester: true,
+      donor: true,
+    },
+  });
+  console.log(result);
+
+  return result;
+};
 
 export const DonorService = {
   getAllFromDb,
   postFromDb,
   getFromDb,
   updateFromDb,
+  getSingleFromDb,
+  getFromMeDb,
+  getFromMyRequestDb
 };

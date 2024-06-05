@@ -13,4 +13,4 @@ export const donorFilterableFields = [
   "location",
   "contactNumber",
 ];
-export const donorSearchAbleFields = ["name", "email", "bloodType", "location"];
+export const donorSearchAbleFields = ["location"];

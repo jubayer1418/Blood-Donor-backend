@@ -29,7 +29,8 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const donor_constant_1 = require("./donor.constant");
 const getAllFromDb = (param, options) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, limit, sortBy, sortOrder, skip } = paginationHelper_1.paginationHelper.calculatePagination(options);
-    const { searchTerm } = param, filterData = __rest(param, ["searchTerm"]);
+    const { searchTerm, availability } = param, filterData = __rest(param, ["searchTerm", "availability"]);
+    console.log(searchTerm);
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
@@ -41,6 +42,18 @@ const getAllFromDb = (param, options) => __awaiter(void 0, void 0, void 0, funct
             })),
         });
     }
+    if (availability !== undefined) {
+        andConditions.push({
+            availability: undefined ||
+                (availability == "Available" && true) ||
+                (availability == "Unavailable" && false) ||
+                (availability == "" && undefined),
+        });
+    }
+    if (filterData.bloodType == "")
+        delete filterData.bloodType;
+    if (filterData.location == "")
+        delete filterData.location;
     if (Object.keys(filterData).length > 0) {
         andConditions.push({
             AND: Object.keys(filterData).map((field) => ({
@@ -78,11 +91,15 @@ const getAllFromDb = (param, options) => __awaiter(void 0, void 0, void 0, funct
     };
 });
 const postFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(id);
     const result = yield prisma_1.default.request.create({
         data: Object.assign(Object.assign({}, payload), { requesterId: id }),
         include: {
             donor: {
+                include: {
+                    userProfile: true,
+                },
+            },
+            requester: {
                 include: {
                     userProfile: true,
                 },
@@ -95,6 +112,7 @@ const getFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.request.findMany({
         include: {
             requester: true,
+            donor: true,
         },
     });
     return result;
@@ -108,9 +126,44 @@ const updateFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function
     });
     return result;
 });
+const getSingleFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.user.findUniqueOrThrow({
+        where: { id },
+        include: {
+            userProfile: true,
+        },
+    });
+    console.log(result);
+    return result;
+});
+const getFromMeDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.request.findMany({
+        where: { donorId: id },
+        include: {
+            requester: true,
+            donor: true,
+        },
+    });
+    console.log(result);
+    return result;
+});
+const getFromMyRequestDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.request.findMany({
+        where: { requesterId: id },
+        include: {
+            requester: true,
+            donor: true,
+        },
+    });
+    console.log(result);
+    return result;
+});
 exports.DonorService = {
     getAllFromDb,
     postFromDb,
     getFromDb,
     updateFromDb,
+    getSingleFromDb,
+    getFromMeDb,
+    getFromMyRequestDb
 };

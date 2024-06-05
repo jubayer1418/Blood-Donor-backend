@@ -20,6 +20,11 @@ const createDonor = z.object({
   reason: z.string({
     required_error: "reason is required",
   }),
+  time: z.string().min(1, { message: "Time is required." }),
+  additionalInfo: z.string().optional(),
+  termsAgreed: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the terms and conditions.",
+  }),
 });
 
 export const DororValidation = {

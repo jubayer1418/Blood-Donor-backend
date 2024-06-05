@@ -25,12 +25,26 @@ const getFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const updateFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    yield prisma_1.default.userProfile.findUniqueOrThrow({ where: { userId: id } });
-    const result = yield prisma_1.default.userProfile.update({
-        where: { userId: id },
-        data: payload,
-    });
+const updateFromDb = (id, userPayload, userProfilePayload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("User payload:", userPayload);
+    console.log("User profile payload:", userProfilePayload);
+    let result = {};
+    if (userPayload) {
+        const data = yield prisma_1.default.user.findUniqueOrThrow({ where: { id } });
+        const user = yield prisma_1.default.user.update({
+            where: { id },
+            data: userPayload,
+        });
+        result["user"] = user;
+    }
+    if (userProfilePayload) {
+        yield prisma_1.default.userProfile.findUniqueOrThrow({ where: { userId: id } });
+        const profile = yield prisma_1.default.userProfile.update({
+            where: { userId: id },
+            data: userProfilePayload,
+        });
+        result["userProfile"] = profile;
+    }
     return result;
 });
 exports.profileService = {

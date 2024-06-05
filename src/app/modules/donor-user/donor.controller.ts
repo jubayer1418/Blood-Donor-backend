@@ -79,10 +79,67 @@ const updateFromDb = async (
     next(error);
   }
 };
+const getSingleFromDb = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log(req.params)
+    const result = await DonorService.getSingleFromDb(req.params.id);
 
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Single Donar successfully!",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const getFromMeDb = async (
+  req: Request & { user?: any },
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await DonorService.getFromMeDb(req.user.id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Request successfully made!",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const getFromMyRequestDb = async (
+  req: Request & { user?: any },
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await DonorService.getFromMeDb(req.user.id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Request successfully made!",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const DonorController = {
   getAllFromDb,
   getFromDb,
   postFromDb,
   updateFromDb,
+  getSingleFromDb,
+  getFromMeDb,
+  getFromMyRequestDb
 };

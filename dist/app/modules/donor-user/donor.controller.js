@@ -77,9 +77,55 @@ const updateFromDb = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next(error);
     }
 });
+const getSingleFromDb = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.params);
+        const result = yield donor_service_1.DonorService.getSingleFromDb(req.params.id);
+        (0, sendRespons_1.default)(res, {
+            success: true,
+            statusCode: http_status_1.default.OK,
+            message: "Single Donar successfully!",
+            data: result,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+const getFromMeDb = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield donor_service_1.DonorService.getFromMeDb(req.user.id);
+        (0, sendRespons_1.default)(res, {
+            success: true,
+            statusCode: http_status_1.default.OK,
+            message: "Request successfully made!",
+            data: result,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+const getFromMyRequestDb = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield donor_service_1.DonorService.getFromMeDb(req.user.id);
+        (0, sendRespons_1.default)(res, {
+            success: true,
+            statusCode: http_status_1.default.OK,
+            message: "Request successfully made!",
+            data: result,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.DonorController = {
     getAllFromDb,
     getFromDb,
     postFromDb,
     updateFromDb,
+    getSingleFromDb,
+    getFromMeDb,
+    getFromMyRequestDb
 };

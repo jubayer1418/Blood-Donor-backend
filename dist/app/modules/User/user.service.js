@@ -17,19 +17,17 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../../../config"));
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
+const http_status_1 = __importDefault(require("http-status"));
 const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const hashPassword = yield bcrypt_1.default.hash(data.password, 12);
     const userData = {
-        email: data.email,
+        email: data.bloodDoner.email,
         password: hashPassword,
-        name: data.name,
-        bloodType: data.bloodType,
-        location: data.location,
-    };
-    const userProfileData = {
-        bio: data.bio,
-        age: data.age,
-        lastDonationDate: data.lastDonationDate,
+        name: data.bloodDoner.name,
+        bloodType: data.bloodDoner.bloodType,
+        location: data.bloodDoner.location || "",
+        canDonateBlood: data.bloodDoner.canDonateBlood || false,
     };
     console.log(userData);
     const result = yield prisma_1.default.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,18 +39,50 @@ const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
                 email: true,
                 bloodType: true,
                 location: true,
-                availability: true,
                 password: false,
                 createdAt: true,
                 updatedAt: true,
             },
         });
         const createdUserProfileData = yield transactionClient.userProfile.create({
-            data: Object.assign(Object.assign({}, userProfileData), { userId: createUser.id }),
+            data: { userId: createUser.id },
         });
         return Object.assign(Object.assign({}, createUser), { userProfile: createdUserProfileData });
     }));
     return result;
+});
+// const createUser = async (data: any) => {
+//   console.log(data);
+//   const hashPassword: string = await bcrypt.hash(data.password, 12);
+//   const userData = {
+//     email: data.bloodDoner.email,
+//     password: hashPassword,
+//     name: data.bloodDoner.name,
+//     bloodType: data.bloodDoner.bloodType,
+//     location: data.bloodDoner.location || "",
+//     canDonateBlood: data.bloodDoner.canDonateBlood || false,
+//   };
+//   const result = await prisma.user.create({
+//     data: userData,
+//     select: {
+//       id: true,
+//       name: true,
+//       email: true,
+//       bloodType: true,
+//       location: true,
+//       password: false,
+//       createdAt: true,
+//       updatedAt: true,
+//     },
+//   });
+//   return result;
+// };
+const updateUserProfile = (userId, profileData) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedProfile = yield prisma_1.default.userProfile.update({
+        where: { id: userId },
+        data: profileData,
+    });
+    return updatedProfile;
 });
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = yield prisma_1.default.user.findUniqueOrThrow({
@@ -82,7 +112,58 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         accessToken: accessToken,
     };
 });
+const changePassword = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userData = yield prisma_1.default.user.findUniqueOrThrow({
+        where: {
+            id,
+        },
+    });
+    const validPassword = yield bcrypt_1.default.compare(payload.current_password, userData.password);
+    if (!validPassword) {
+        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "Invalid password");
+    }
+    const hashPassword = yield bcrypt_1.default.hash(payload.new_password, 12);
+    const result = yield prisma_1.default.user.update({
+        where: {
+            id,
+        },
+        data: {
+            password: hashPassword,
+        },
+    });
+    return result;
+});
+const changeRoleStatus = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payload);
+    const userData = yield prisma_1.default.user.findUniqueOrThrow({
+        where: {
+            id: payload.id,
+        },
+    });
+    const admin = yield prisma_1.default.user.findUniqueOrThrow({
+        where: {
+            id,
+        },
+    });
+    if (admin.role == "ADMIN") {
+        const result = yield prisma_1.default.user.update({
+            where: {
+                id: payload.id,
+            },
+            data: {
+                role: payload.role,
+                status: payload.status,
+            },
+        });
+        return result;
+    }
+    else {
+        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "You are not admin");
+    }
+});
 exports.userService = {
     createUser,
     loginUser,
+    changePassword,
+    changeRoleStatus,
 };

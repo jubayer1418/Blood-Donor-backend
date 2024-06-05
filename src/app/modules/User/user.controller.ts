@@ -15,6 +15,7 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 });
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const result = await userService.loginUser(req.body);
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -22,7 +23,30 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const changePassword = catchAsync(async (req: Request  & { user?: any }, res: Response) => {
+  const result = await userService.changePassword(req.user.id,req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User Change Password  successfully",
+    data: result,
+  });
+});
+const changeRoleStatus = catchAsync(async (req: Request  & { user?: any }, res: Response) => {
+  console.log(req.body)
+  const result = await userService.changeRoleStatus(req.user.id,req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User Change Role and Status  successfully",
+    data: result,
+  });
+});
 export const userController = {
   createUser,
   loginUser,
+  changePassword,
+  changeRoleStatus
 };

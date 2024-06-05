@@ -35,7 +35,28 @@ const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result,
     });
 }));
+const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.changePassword(req.user.id, req.body);
+    (0, sendRespons_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: "User Change Password  successfully",
+        data: result,
+    });
+}));
+const changeRoleStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    const result = yield user_service_1.userService.changeRoleStatus(req.user.id, req.body);
+    (0, sendRespons_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: "User Change Role and Status  successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     createUser,
     loginUser,
+    changePassword,
+    changeRoleStatus
 };

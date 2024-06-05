@@ -16,4 +16,4 @@ exports.donorFilterableFields = [
     "location",
     "contactNumber",
 ];
-exports.donorSearchAbleFields = ["name", "email", "bloodType", "location"];
+exports.donorSearchAbleFields = ["location"];

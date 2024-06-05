@@ -1,17 +1,29 @@
+import { BloodType } from "@prisma/client";
 import { z } from "zod";
 
 const createUser = z.object({
-  name: z.string({
-    required_error: "Name is required!",
-  }),
-  email: z
-    .string({
-      required_error: "Email is required!",
-    })
-    .email({
-      message: "Email must be a valid email address.",
+  bloodDoner: z.object({
+    name: z.string({
+      required_error: "Name is required!",
     }),
+    email: z
+      .string({
+        required_error: "Email is required!",
+      })
+      .email({
+        message: "Email must be a valid email address.",
+      }),
+    bloodType: z.nativeEnum(BloodType).optional(),
+    location: z.string({
+      required_error: "location is required",
+    }).optional(),
 
+    lastDonationDate: z
+      .boolean({
+        required_error: "lastDonationDate is required",
+      })
+      .optional(),
+  }),
   password: z.string({
     required_error: "Password is required",
   }),
@@ -23,21 +35,6 @@ const createUser = z.object({
   //       "Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character",
   //   }
   // )
-  bloodType: z.string({
-    required_error: "bloodType is required",
-  }),
-  location: z.string({
-    required_error: "location is required",
-  }),
-  age: z.number({
-    required_error: "age is required",
-  }),
-  bio: z.string({
-    required_error: "bio is required",
-  }),
-  lastDonationDate: z.string({
-    required_error: "lastDonationDate is required",
-  }),
 });
 
 export const userValidation = {

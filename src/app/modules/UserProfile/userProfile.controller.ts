@@ -1,3 +1,4 @@
+import { userProfileRouters } from './userProfile.routers';
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
@@ -17,7 +18,10 @@ const getUserProfile = catchAsync(
 );
 const updateProfile = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
-    const result = await profileService.updateFromDb(req.user.id, req.body);
+    console.log(req.body)
+    const userProfilePayload =req.body.userProfilePayload
+    const userPayload =req.body.userPayload
+    const result = await profileService.updateFromDb(req.user.id, userPayload,userProfilePayload);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
