@@ -5,7 +5,10 @@ CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 CREATE TYPE "BloodType" AS ENUM ('A_POSITIVE', 'A_NEGATIVE', 'B_POSITIVE', 'B_NEGATIVE', 'AB_POSITIVE', 'AB_NEGATIVE', 'O_POSITIVE', 'O_NEGATIVE');
 
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('Admin', 'User');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
+
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('ACTIVATE', 'DEACTIVATE');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -13,9 +16,10 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "status" "Status" DEFAULT 'ACTIVATE',
     "bloodType" "BloodType",
     "location" TEXT,
-    "role" "Role" DEFAULT 'User',
+    "role" "Role" DEFAULT 'USER',
     "canDonateBlood" BOOLEAN NOT NULL DEFAULT false,
     "availability" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,9 +52,10 @@ CREATE TABLE "request" (
     "dateOfDonation" TEXT NOT NULL,
     "hospitalName" TEXT,
     "hospitalAddress" TEXT NOT NULL,
-    "reason" TEXT NOT NULL,
-    "dateNeeded" TIMESTAMP(3),
+    "reason" TEXT,
+    "time" TEXT,
     "additionalInfo" TEXT,
+    "termsAgreed" BOOLEAN,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
