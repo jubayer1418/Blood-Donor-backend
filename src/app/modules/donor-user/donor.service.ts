@@ -75,6 +75,15 @@ const getAllFromDb = async (param: any, options: any) => {
 };
 
 const postFromDb = async (id: string, payload: any) => {
+  const already = await prisma.request.findFirstOrThrow({
+    where: {
+      requesterId: id,
+      donorId: payload.donorId,
+    },
+  });
+  if (already) {
+    throw new Error("Already Requested!");
+  }
   const result = await prisma.request.create({
     data: { ...payload, requesterId: id },
 
@@ -124,7 +133,7 @@ const getSingleFromDb = async (id: string) => {
   return result;
 };
 const getFromMeDb = async (id: string) => {
-  console.log("me",id)
+  console.log("me", id);
   const result = await prisma.request.findMany({
     where: { donorId: id },
     include: {
@@ -137,7 +146,7 @@ const getFromMeDb = async (id: string) => {
   return result;
 };
 const getFromMyRequestDb = async (id: string) => {
-  console.log(id)
+  console.log(id);
   const result = await prisma.request.findMany({
     where: { requesterId: id },
     include: {
@@ -157,5 +166,5 @@ export const DonorService = {
   updateFromDb,
   getSingleFromDb,
   getFromMeDb,
-  getFromMyRequestDb
+  getFromMyRequestDb,
 };
