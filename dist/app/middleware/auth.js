@@ -25,10 +25,12 @@ const auth = () => {
             throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "No JWT is provided in the request headers!");
         }
         let decoded;
+        console.log(token);
         try {
             decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt.jwt_secret);
         }
         catch (error) {
+            console.log(error);
             throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "The provided JWT (JSON Web Token) has expired.");
         }
         const { id } = decoded;

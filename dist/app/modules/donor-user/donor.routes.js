@@ -15,6 +15,6 @@ routes.get("/donor-list/:id", donor_controller_1.DonorController.getSingleFromDb
 routes.post("/donation-request", (0, validation_1.default)(donor_validation_1.DororValidation.createDonor), (0, auth_1.default)(), donor_controller_1.DonorController.postFromDb);
 routes.get("/donation-request", (0, auth_1.default)(), donor_controller_1.DonorController.getFromDb);
 routes.get("/donation-request-me", (0, auth_1.default)(), donor_controller_1.DonorController.getFromMeDb);
-routes.get("/donation-request-my-request", (0, auth_1.default)(), donor_controller_1.DonorController.getFromMyRequestDb);
+routes.get("/donation-request-my", (0, auth_1.default)(), donor_controller_1.DonorController.getFromMyRequestDb);
 routes.put("/donation-request/:requestId", (0, auth_1.default)(), donor_controller_1.DonorController.updateFromDb);
 exports.DonorRoutes = routes;

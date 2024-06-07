@@ -14,7 +14,7 @@ routes.post(
 );
 routes.get("/donation-request", auth(), DonorController.getFromDb);
 routes.get("/donation-request-me", auth(), DonorController.getFromMeDb);
-routes.get("/donation-request-my-request", auth(), DonorController.getFromMyRequestDb);
+routes.get("/donation-request-my", auth(), DonorController.getFromMyRequestDb);
 routes.put(
   "/donation-request/:requestId",
   auth(),

@@ -124,6 +124,7 @@ const getSingleFromDb = async (id: string) => {
   return result;
 };
 const getFromMeDb = async (id: string) => {
+  console.log("me",id)
   const result = await prisma.request.findMany({
     where: { donorId: id },
     include: {
@@ -136,6 +137,7 @@ const getFromMeDb = async (id: string) => {
   return result;
 };
 const getFromMyRequestDb = async (id: string) => {
+  console.log(id)
   const result = await prisma.request.findMany({
     where: { requesterId: id },
     include: {

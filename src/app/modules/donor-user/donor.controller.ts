@@ -122,7 +122,7 @@ const getFromMyRequestDb = async (
   next: NextFunction
 ) => {
   try {
-    const result = await DonorService.getFromMeDb(req.user.id);
+    const result = await DonorService.getFromMyRequestDb(req.user.id);
 
     sendResponse(res, {
       success: true,

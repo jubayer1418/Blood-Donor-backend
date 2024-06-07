@@ -22,9 +22,11 @@ const auth = () => {
         );
       }
       let decoded;
+      console.log(token)
       try {
         decoded = jwt.verify(token, config.jwt.jwt_secret as Secret);
       } catch (error) {
+        console.log(error)
         throw new AppError(
           httpStatus.UNAUTHORIZED,
           "The provided JWT (JSON Web Token) has expired."

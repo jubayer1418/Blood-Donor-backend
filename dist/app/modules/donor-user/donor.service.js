@@ -137,6 +137,7 @@ const getSingleFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getFromMeDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("me", id);
     const result = yield prisma_1.default.request.findMany({
         where: { donorId: id },
         include: {
@@ -148,6 +149,7 @@ const getFromMeDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getFromMyRequestDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(id);
     const result = yield prisma_1.default.request.findMany({
         where: { requesterId: id },
         include: {

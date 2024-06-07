@@ -108,7 +108,7 @@ const getFromMeDb = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 });
 const getFromMyRequestDb = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield donor_service_1.DonorService.getFromMeDb(req.user.id);
+        const result = yield donor_service_1.DonorService.getFromMyRequestDb(req.user.id);
         (0, sendRespons_1.default)(res, {
             success: true,
             statusCode: http_status_1.default.OK,
