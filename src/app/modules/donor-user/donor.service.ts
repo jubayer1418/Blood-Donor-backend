@@ -84,24 +84,26 @@ const postFromDb = async (id: string, payload: any) => {
   });
   if (already) {
     throw new Error("Already Requested!");
+  }else{
+    const result = await prisma.request.create({
+      data: { ...payload, requesterId: id },
+  
+      include: {
+        donor: {
+          include: {
+            userProfile: true,
+          },
+        },
+        requester: {
+          include: {
+            userProfile: true,
+          },
+        },
+      },
+    });
+    return result;
   }
-  const result = await prisma.request.create({
-    data: { ...payload, requesterId: id },
 
-    include: {
-      donor: {
-        include: {
-          userProfile: true,
-        },
-      },
-      requester: {
-        include: {
-          userProfile: true,
-        },
-      },
-    },
-  });
-  return result;
 };
 const getFromDb = async () => {
   const result = await prisma.request.findMany({

@@ -91,7 +91,7 @@ const getAllFromDb = (param, options) => __awaiter(void 0, void 0, void 0, funct
     };
 });
 const postFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const already = yield prisma_1.default.request.findFirstOrThrow({
+    const already = yield prisma_1.default.request.findFirst({
         where: {
             requesterId: id,
             donorId: payload.donorId,
@@ -100,22 +100,24 @@ const postFromDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     if (already) {
         throw new Error("Already Requested!");
     }
-    const result = yield prisma_1.default.request.create({
-        data: Object.assign(Object.assign({}, payload), { requesterId: id }),
-        include: {
-            donor: {
-                include: {
-                    userProfile: true,
+    else {
+        const result = yield prisma_1.default.request.create({
+            data: Object.assign(Object.assign({}, payload), { requesterId: id }),
+            include: {
+                donor: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                requester: {
+                    include: {
+                        userProfile: true,
+                    },
                 },
             },
-            requester: {
-                include: {
-                    userProfile: true,
-                },
-            },
-        },
-    });
-    return result;
+        });
+        return result;
+    }
 });
 const getFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.request.findMany({
