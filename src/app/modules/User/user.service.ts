@@ -97,6 +97,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
     id: userData.id,
     name: userData.name,
     email: userData.email,
+    role: userData.role,
   };
   const accessToken = jwt.sign(jwtToken, config.jwt.jwt_secret as Secret, {
     expiresIn: config.jwt.expires_in,
@@ -137,10 +138,10 @@ const changePassword = async (
   return result;
 };
 const changeRoleStatus = async (id: string, payload: any) => {
-  console.log(payload)
+  console.log(payload);
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
-      id:payload.id,
+      id: payload.id,
     },
   });
   const admin = await prisma.user.findUniqueOrThrow({
@@ -151,7 +152,7 @@ const changeRoleStatus = async (id: string, payload: any) => {
   if (admin.role == "ADMIN") {
     const result = await prisma.user.update({
       where: {
-        id:payload.id,
+        id: payload.id,
       },
       data: {
         role: payload.role,
@@ -159,7 +160,7 @@ const changeRoleStatus = async (id: string, payload: any) => {
       },
     });
     return result;
-  }else{
+  } else {
     throw new AppError(httpStatus.UNAUTHORIZED, "You are not admin");
   }
 };

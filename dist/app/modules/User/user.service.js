@@ -101,6 +101,7 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         id: userData.id,
         name: userData.name,
         email: userData.email,
+        role: userData.role,
     };
     const accessToken = jsonwebtoken_1.default.sign(jwtToken, config_1.default.jwt.jwt_secret, {
         expiresIn: config_1.default.jwt.expires_in,
