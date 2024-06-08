@@ -75,7 +75,9 @@ const getAllFromDb = async (param: any, options: any) => {
 };
 
 const postFromDb = async (id: string, payload: any) => {
-  const already = await prisma.request.findFirstOrThrow({
+  console.log(payload)
+  console.log(id)
+  const already = await prisma.request.findFirst({
     where: {
       requesterId: id,
       donorId: payload.donorId,
